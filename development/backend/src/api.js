@@ -287,7 +287,6 @@ const tomeActive = async (req, res) => {
   const items = Array(recordResult.length);
   let count = 0;
 
-  const searchUserQs = 'select * from user where user_id = ?';
   const searchGroupQs = 'select * from group_info where group_id = ?';
   const searchThumbQs =
     'select * from record_item_file where linked_record_id = ? order by item_id asc limit 1';
@@ -311,7 +310,7 @@ const tomeActive = async (req, res) => {
 
     const line = recordResult[i];
     mylog(line);
-    const recordId = recordResult[i].record_id;
+    const recordId = recordResult[i].record.record_id;
     const createdBy = line.created_by;
     const applicationGroup = line.application_group;
     const updatedAt = line.updated_at;
@@ -321,7 +320,7 @@ const tomeActive = async (req, res) => {
     let commentCount = 0;
     let isUnConfirmed = true;
 
-    createdByName = recordResult[i].name;
+    createdByName = recordResult[i].user.name;
 
     const [groupResult] = await pool.query(searchGroupQs, [applicationGroup]);
     if (groupResult.length === 1) {
