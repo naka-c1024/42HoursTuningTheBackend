@@ -32,7 +32,8 @@ const mylog = (obj) => {
 const getLinkedUser = async (headers) => {
   const target = headers['x-app-key'];
   mylog(target);
-  const qs = `select * from session where value = ?`;
+  let qs = `ALTER TABLE session ADD INDEX (value);`;
+  qs += `select * from session where value = ?`;
 
   const [rows] = await pool.query(qs, [`${target}`]);
 
