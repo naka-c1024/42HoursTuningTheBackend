@@ -836,6 +836,7 @@ const postComments = async (req, res) => {
 // カテゴリーの取得
 const getCategories = async (req, res) => {
   let user = await getLinkedUser(req.headers);
+  console.log("fuga");
 
   if (!user) {
     res.status(401).send();
