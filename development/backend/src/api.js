@@ -256,7 +256,7 @@ const tomeActive = async (req, res) => {
     }
   }
 
-  let searchRecordQs ='select * from record';
+  let searchRecordQs ='select record_id, user.name as user_name from record';
   searchRecordQs += ' left join user on created_by = user.user_id';
   searchRecordQs += ' where status = "open" and (category_id, application_group) in (';
   let recordCountQs =
@@ -320,7 +320,7 @@ const tomeActive = async (req, res) => {
     let commentCount = 0;
     let isUnConfirmed = true;
 
-    createdByName = recordResult[i].user.name;
+    createdByName = recordResult[i].user_name;
 
     const [groupResult] = await pool.query(searchGroupQs, [applicationGroup]);
     if (groupResult.length === 1) {
