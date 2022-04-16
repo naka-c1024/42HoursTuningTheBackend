@@ -320,7 +320,7 @@ const tomeActive = async (req, res) => {
     let commentCount = 0;
     let isUnConfirmed = true;
 
-    createdByName = recordResult[i].name;
+    createdByName = recordResult[i].user.name;
 
     const [groupResult] = await pool.query(searchGroupQs, [applicationGroup]);
     if (groupResult.length === 1) {
