@@ -7,12 +7,9 @@ const api = require("./api");
 
 app.get('/api/hello', (req, res) => {
   console.log('requested');
-  console.time('counter');
   res.send({ response :'World!'})
-  console.timeEnd('counter');
 })
 
-// 
 app.post('/api/client/records', async (req, res, next) => {
   try {
     await api.postRecords(req, res);
