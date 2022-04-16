@@ -7,7 +7,7 @@ const api = require("./api");
 
 app.get('/api/hello', (req, res) => {
   console.log('requested');
-  res.send({ response :'ynakashi'})
+  res.send({ response :'World!'})
 })
 
 app.post('/api/client/records', async (req, res, next) => {
