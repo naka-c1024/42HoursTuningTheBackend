@@ -256,10 +256,10 @@ const tomeActive = async (req, res) => {
     }
   }
 
-  let searchRecordQs ='select record_id, user.name as user_name, user.id as user_id, group_info.name as group_name, record_last_access.access_time as access_time from record';
+  let searchRecordQs ='select record.record_id, user.name as user_name, user.user_id as user_id, group_info.name as group_name, record_last_access.access_time as access_time from record';
   searchRecordQs += ' left join user on created_by = user.user_id';
   searchRecordQs += ' left join group_info on application_group = group_info.group_id';
-  searchRecordQs += ' left join record_last_access on user_id = record_last_access.user_id and record_id = record_last_access.record_id';
+  searchRecordQs += ' left join record_last_access on user.user_id = record_last_access.user_id and record.record_id = record_last_access.record_id';
   searchRecordQs += ' where status = "open" and (category_id, application_group) in (';
   let recordCountQs =
     'select count(*) from record where status = "open" and (category_id, application_group) in (';
