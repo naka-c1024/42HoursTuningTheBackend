@@ -7,6 +7,7 @@ const api = require("./api");
 
 app.post('/api/client/records', async (req, res, next) => {
   try {
+    console.log("hoge");
     console.time('counter');
     await api.postRecords(req, res);
     console.timeEnd('counter');
