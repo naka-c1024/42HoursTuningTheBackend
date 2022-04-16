@@ -6,8 +6,10 @@ app.use(express.json({limit: '10mb'}))
 const api = require("./api");
 
 app.get('/api/hello', (req, res) => {
+  console.time('hello label');
   console.log('requested');
   res.send({ response :'ynakashi'})
+  console.timeEnd('hello label');
 })
 
 app.post('/api/client/records', async (req, res, next) => {
