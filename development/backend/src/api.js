@@ -32,8 +32,9 @@ const mylog = (obj) => {
 const getLinkedUser = async (headers) => {
   const target = headers['x-app-key'];
   mylog(target);
-  const qs = `ALTER TABLE session ADD INDEX (value);
-  select * from session where value = ?`;
+  await pool.query(`ALTER TABLE session ADD INDEX (value)`);
+
+  const qs = `select * from session where value = ?`;
 
   const [rows] = await pool.query(qs, [`${target}`]);
 
@@ -62,9 +63,9 @@ const postRecords = async (req, res) => {
   const body = req.body;
   mylog(body);
 
+  await pool.query(`ALTER TABLE group_member ADD INDEX (user_id)`);
   let [rows] = await pool.query(
-    `ALTER TABLE group_member ADD INDEX (user_id);
-    select * from group_member where user_id = ?
+    `select * from group_member where user_id = ?
     AND is_primary = true`,
     [user.user_id],
   );
@@ -507,8 +508,9 @@ const allClosed = async (req, res) => {
     offset = 0;
     limit = 10;
   }
-  const searchRecordQs = `ALTER TABLE record ADD INDEX (status, updated_at DESC);
-  select * from record where status = "closed" order by updated_at desc, record_id asc limit ? offset ?`;
+  await pool.query(`ALTER TABLE record ADD INDEX (status, updated_at DESC)`);
+
+  const searchRecordQs = `select * from record where status = "closed" order by updated_at desc, record_id asc limit ? offset ?`;
 
   const [recordResult] = await pool.query(searchRecordQs, [limit, offset]);
   mylog(recordResult);
