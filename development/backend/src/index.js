@@ -6,6 +6,7 @@ app.use(express.json({limit: '10mb'}))
 const api = require("./api");
 
 app.get('/api/hello', (req, res) => {
+  console.log('requested');
   res.send({ response :'World!'})
 })
 
