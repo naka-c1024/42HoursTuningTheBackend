@@ -19,6 +19,8 @@ CREATE TABLE `group_member` (
     PRIMARY KEY (`group_id`, `user_id`)
 );
 
+ALTER TABLE group_member ADD INDEX (user_id);
+
 CREATE TABLE `record` (
     `record_id` VARCHAR(64) NOT NULL,
     `status` VARCHAR(16) NOT NULL,
@@ -31,6 +33,8 @@ CREATE TABLE `record` (
     `updated_at` TIMESTAMP NOT NULL,
     PRIMARY KEY (`record_id`)
 );
+
+ALTER TABLE record ADD INDEX (status, updated_at DESC);
 
 CREATE TABLE `record_item_file` (
     `item_id` bigint NOT NULL AUTO_INCREMENT,
@@ -77,6 +81,8 @@ CREATE TABLE `session` (
     `created_at` TIMESTAMP NOT NULL,
     PRIMARY KEY (`session_id`)
 );
+
+ALTER TABLE session ADD INDEX (value);
 
 CREATE TABLE `file` (
     `file_id` VARCHAR(64) NOT NULL,
