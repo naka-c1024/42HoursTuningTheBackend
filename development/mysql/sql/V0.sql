@@ -34,6 +34,8 @@ CREATE TABLE `record` (
     PRIMARY KEY (`record_id`)
 );
 
+ALTER TABLE record ADD INDEX (status, updated_at DESC);
+
 CREATE TABLE `record_item_file` (
     `item_id` bigint NOT NULL AUTO_INCREMENT,
     `linked_record_id` VARCHAR(64) NOT NULL,
