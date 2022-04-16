@@ -256,8 +256,9 @@ const tomeActive = async (req, res) => {
     }
   }
 
-  let searchRecordQs =
-    'select * from record where status = "open" and (category_id, application_group) in (';
+  let searchRecordQs ='select * from record';
+  searchRecordQs += 'innor join user on record.created_by = user.user_id';
+  searchRecordQs += 'where record.status = "open" and (record.category_id, record.application_group) in (';
   let recordCountQs =
     'select count(*) from record where status = "open" and (category_id, application_group) in (';
   const param = [];
@@ -273,7 +274,7 @@ const tomeActive = async (req, res) => {
     param.push(targetCategoryAppGroupList[i].categoryId);
     param.push(targetCategoryAppGroupList[i].applicationGroup);
   }
-  searchRecordQs += ' ) order by updated_at desc, record_id  limit ? offset ?';
+  searchRecordQs += ' ) order by record.updated_at desc, record.record_id  limit ? offset ?';
   recordCountQs += ' )';
   param.push(limit);
   param.push(offset);
@@ -320,10 +321,7 @@ const tomeActive = async (req, res) => {
     let commentCount = 0;
     let isUnConfirmed = true;
 
-    const [userResult] = await pool.query(searchUserQs, [createdBy]);
-    if (userResult.length === 1) {
-      createdByName = userResult[0].name;
-    }
+    createdByName = recordResult[i].name;
 
     const [groupResult] = await pool.query(searchGroupQs, [applicationGroup]);
     if (groupResult.length === 1) {
@@ -331,8 +329,8 @@ const tomeActive = async (req, res) => {
     }
 
     const [itemResult] = await pool.query(searchThumbQs, [recordId]);
+    thumbNailItemId = itemResult[0].item_id;
     if (itemResult.length === 1) {
-      thumbNailItemId = itemResult[0].item_id;
     }
 
     const [countResult] = await pool.query(countQs, [recordId]);
