@@ -35,6 +35,8 @@ CREATE TABLE `record` (
 );
 
 ALTER TABLE record ADD INDEX (status, updated_at DESC);
+ALTER TABLE record ADD INDEX (status);
+ALTER TABLE record ADD INDEX (created_by, status);
 
 CREATE TABLE `record_item_file` (
     `item_id` bigint NOT NULL AUTO_INCREMENT,
@@ -60,6 +62,8 @@ CREATE TABLE `record_comment` (
     `created_at` TIMESTAMP NOT NULL,
     PRIMARY KEY (`comment_id`)
 );
+
+ALTER TABLE record_comment ADD INDEX (linked_record_id);
 
 CREATE TABLE `category` (
     `category_id` bigint NOT NULL AUTO_INCREMENT,
