@@ -7,7 +7,7 @@ const api = require("./api");
 
 app.get('/api/hello', (req, res) => {
   console.log('requested');
-  res.send({ response :'World!'})
+  res.send({ response :'ynakashi'})
 })
 
 app.post('/api/client/records', async (req, res, next) => {
@@ -129,4 +129,3 @@ app.get('/api/client/records/:recordId/files/:itemId/thumbnail', async (req, res
 
 
 app.listen(8000, () => console.log('listening on port 8000...'))
-
