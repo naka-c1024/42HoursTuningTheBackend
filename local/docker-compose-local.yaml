@@ -2,7 +2,7 @@ version: "3.7"
 services:
     nginx:
       build:
-        context: ./localNginx #ローカル開発用です。HTTPSポートは公開しません 
+        context: ./localNginx #ローカル開発用です。HTTPSポートは公開しません
         dockerfile: Dockerfile
       ports:
           - target: 80
@@ -21,7 +21,6 @@ services:
       build:
         context: ./localMysql
         dockerfile: Dockerfile
-      platform: linux/amd64 #ここを追記
       environment:
         MYSQL_ALLOW_EMPTY_PASSWORD: 1
         MYSQL_DATABASE: "app"
