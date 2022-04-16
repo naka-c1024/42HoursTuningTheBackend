@@ -329,8 +329,8 @@ const tomeActive = async (req, res) => {
     }
 
     const [itemResult] = await pool.query(searchThumbQs, [recordId]);
-    thumbNailItemId = itemResult[0].item_id;
     if (itemResult.length === 1) {
+      thumbNailItemId = itemResult[0].item_id;
     }
 
     const [countResult] = await pool.query(countQs, [recordId]);
