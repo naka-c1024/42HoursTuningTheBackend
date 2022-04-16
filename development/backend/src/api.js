@@ -257,8 +257,8 @@ const tomeActive = async (req, res) => {
   }
 
   let searchRecordQs ='select * from record';
-  searchRecordQs += 'innor join user on record.created_by = user.user_id';
-  searchRecordQs += 'where record.status = "open" and (record.category_id, record.application_group) in (';
+  searchRecordQs += ' innor join user on record.created_by = user.user_id';
+  searchRecordQs += ' where record.status = "open" and (record.category_id, record.application_group) in (';
   let recordCountQs =
     'select count(*) from record where status = "open" and (category_id, application_group) in (';
   const param = [];
