@@ -256,7 +256,7 @@ const tomeActive = async (req, res) => {
     }
   }
 
-  let searchRecordQs ='select record.record_id, user.name as user_name, user.user_id as user_id, group_info.name as group_name, record_last_access.access_time as access_time from record';
+  let searchRecordQs ='select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.update_at, user.user_id as user_id, group_info.name as group_name,user.name as user_name, record_last_access.access_time as access_time from record';
   searchRecordQs += ' left join user on created_by = user.user_id';
   searchRecordQs += ' left join group_info on application_group = group_info.group_id';
   searchRecordQs += ' left join record_last_access on user.user_id = record_last_access.user_id and record.record_id = record_last_access.record_id';
@@ -382,7 +382,7 @@ const allActive = async (req, res) => {
     limit = 10;
   }
 
-  let searchRecordQs = 'select record.record_id, user.user_id as user_id, group_info.name as group_name,user.name as user_name, record_last_access.access_time as access_time from record';
+  let searchRecordQs = 'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.update_at, user.user_id as user_id, group_info.name as group_name,user.name as user_name, record_last_access.access_time as access_time from record';
   searchRecordQs += ' left join user on created_by = user.user_id';
   searchRecordQs += ' left join group_info on application_group = group_info.group_id';
   searchRecordQs += ' left join record_last_access on user.user_id = record_last_access.user_id and record.record_id = record_last_access.record_id';
@@ -489,7 +489,7 @@ const allClosed = async (req, res) => {
     limit = 10;
   }
 
-  let searchRecordQs = 'select record.record_id, user.user_id as user_id, group_info.name as group_name,user.name as user_name, record_last_access.access_time as access_time from record';
+  let searchRecordQs = 'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.update_at, user.user_id as user_id, group_info.name as group_name,user.name as user_name, record_last_access.access_time as access_time from record';
   searchRecordQs += ' left join user on created_by = user.user_id';
   searchRecordQs += ' left join group_info on application_group = group_info.group_id';
   searchRecordQs += ' left join record_last_access on user.user_id = record_last_access.user_id and record.record_id = record_last_access.record_id';
