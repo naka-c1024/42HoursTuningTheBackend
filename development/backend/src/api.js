@@ -233,7 +233,7 @@ const tomeActive = async (req, res) => {
     limit = 10;
   }
 
-  const searchMyGroupQs = `select * from group_member where user_id = ?`;
+  let searchMyGroupQs = `select * from group_member where user_id = ?`;
   const [myGroupResult] = await pool.query(searchMyGroupQs, [user.user_id]);
   mylog(myGroupResult);
 
@@ -257,7 +257,8 @@ const tomeActive = async (req, res) => {
   }
 
   let searchRecordQs =
-    'select * from record where status = "open" and (category_id, application_group) in (';
+  'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.update_at from record';
+  searchRecordQs += ' where status = "open" and (category_id, application_group) in (';
   let recordCountQs =
     'select count(*) from record where status = "open" and (category_id, application_group) in (';
   const param = [];
@@ -391,7 +392,9 @@ const allActive = async (req, res) => {
     limit = 10;
   }
 
-  const searchRecordQs = `select * from record where status = "open" order by updated_at desc, record_id asc limit ? offset ?`;
+  let searchRecordQs = 
+  'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.update_at from record';
+  searchRecordQs += ' where status = "open" order by updated_at desc, record_id asc limit ? offset ?';
 
   const [recordResult] = await pool.query(searchRecordQs, [limit, offset]);
   mylog(recordResult);
@@ -506,7 +509,9 @@ const allClosed = async (req, res) => {
     limit = 10;
   }
 
-  const searchRecordQs = `select * from record where status = "closed" order by updated_at desc, record_id asc limit ? offset ?`;
+  let searchRecordQs =
+  'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.update_at from record';
+  searchRecordQs += ' where status = "closed" order by updated_at desc, record_id asc limit ? offset ?';
 
   const [recordResult] = await pool.query(searchRecordQs, [limit, offset]);
   mylog(recordResult);
@@ -621,8 +626,8 @@ const mineActive = async (req, res) => {
     limit = 10;
   }
 
-  const searchRecordQs = `select * from record where created_by = ? and status = "open" order by updated_at desc, record_id asc limit ? offset ?`;
-
+  let searchRecordQs = 'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.update_at from record';
+  searchRecordQs += ' where created_by = ? and status = "open" order by updated_at desc, record_id asc limit ? offset ?';
   const [recordResult] = await pool.query(searchRecordQs, [user.user_id, limit, offset]);
   mylog(recordResult);
 
