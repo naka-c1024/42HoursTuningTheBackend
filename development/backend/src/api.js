@@ -184,7 +184,10 @@ const getRecord = async (req, res) => {
   recordInfo.createdBy = line.created_by;
   recordInfo.createdAt = line.created_at;
 
-  const searchItemQs = `select * from record_item_file where linked_record_id = ? order by item_id asc`;
+  let searchItemQs =
+  'select * from record_item_file';
+  searchItemQs += ' left join file on linked_file_id = file.file_id';
+  searchItemQs += ' where linked_record_id = ? order by item_id asc';
   const [itemResult] = await pool.query(searchItemQs, [line.record_id]);
   mylog('itemResult');
   mylog(itemResult);
@@ -192,12 +195,8 @@ const getRecord = async (req, res) => {
   const searchFileQs = `select * from file where file_id = ?`;
   for (let i = 0; i < itemResult.length; i++) {
     const item = itemResult[i];
-    const [fileResult] = await pool.query(searchFileQs, [item.linked_file_id]);
-
-    let fileName = '';
-    if (fileResult.length !== 0) {
-      fileName = fileResult[0].name;
-    }
+    
+    fileName = itemResult[i].name;
 
     recordInfo.files.push({ itemId: item.item_id, name: fileName });
   }
