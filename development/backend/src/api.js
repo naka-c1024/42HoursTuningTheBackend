@@ -192,12 +192,9 @@ const getRecord = async (req, res) => {
   mylog('itemResult');
   mylog(itemResult);
 
-  const searchFileQs = `select * from file where file_id = ?`;
   for (let i = 0; i < itemResult.length; i++) {
     const item = itemResult[i];
-    
     fileName = itemResult[i].name;
-
     recordInfo.files.push({ itemId: item.item_id, name: fileName });
   }
 
