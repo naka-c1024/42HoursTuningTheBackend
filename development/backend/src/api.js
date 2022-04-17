@@ -257,9 +257,10 @@ const tomeActive = async (req, res) => {
   }
 
   let searchRecordQs =
-  'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.updated_at, user.user_id as user_id, group_info.name as group_name,user.name as user_name, record_last_access.access_time as access_time from record';
+  'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.updated_at, user.user_id as user_id, group_info.name as group_name,user.name as user_name, record_last_access.access_time as access_time, record_item_file.item_id as item_id from record';
   searchRecordQs += ' left join user on created_by = user.user_id';
   searchRecordQs += ' left join group_info on application_group = group_info.group_id';
+  searchRecordQs += ' left join record_item_file on record.record_id = record_item_file.linked_record_id';
   searchRecordQs += ' left join record_last_access on user.user_id = record_last_access.user_id and record.record_id = record_last_access.record_id';
   searchRecordQs += ' where status = "open" and (category_id, application_group) in (';
   let recordCountQs =
@@ -328,10 +329,7 @@ const tomeActive = async (req, res) => {
 
     applicationGroupName = recordResult[i].group_name;
 
-    const [itemResult] = await pool.query(searchThumbQs, [recordId]);
-    if (itemResult.length === 1) {
-      thumbNailItemId = itemResult[0].item_id;
-    }
+    thumbNailItemId = recordResult[i].item_id;
 
     const [countResult] = await pool.query(countQs, [recordId]);
     if (countResult.length === 1) {
@@ -387,9 +385,10 @@ const allActive = async (req, res) => {
   }
 
   let searchRecordQs = 
-  'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.updated_at, user.user_id as user_id, group_info.name as group_name,user.name as user_name, record_last_access.access_time as access_time from record';
+  'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.updated_at, user.user_id as user_id, group_info.name as group_name,user.name as user_name, record_last_access.access_time as access_time, record_item_file.item_id as item_id from record';
   searchRecordQs += ' left join user on created_by = user.user_id';
   searchRecordQs += ' left join group_info on application_group = group_info.group_id';
+  searchRecordQs += ' left join record_item_file on record.record_id = record_item_file.linked_record_id';
   searchRecordQs += ' left join record_last_access on user.user_id = record_last_access.user_id and record.record_id = record_last_access.record_id';
   searchRecordQs += ' where status = "open" order by updated_at desc, record_id asc limit ? offset ?';
 
@@ -437,10 +436,7 @@ const allActive = async (req, res) => {
 
     applicationGroupName = recordResult[i].group_name;
 
-    const [itemResult] = await pool.query(searchThumbQs, [recordId]);
-    if (itemResult.length === 1) {
-      thumbNailItemId = itemResult[0].item_id;
-    }
+    thumbNailItemId = recordResult[i].item_id;
 
     const [countResult] = await pool.query(countQs, [recordId]);
     if (countResult.length === 1) {
@@ -498,10 +494,12 @@ const allClosed = async (req, res) => {
   }
 
   let searchRecordQs =
-  'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.updated_at, user.user_id as user_id, group_info.name as group_name,user.name as user_name, record_last_access.access_time as access_time from record';
+  'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.updated_at, user.user_id as user_id, group_info.name as group_name,user.name as user_name, record_last_access.access_time as access_time, record_item_file.item_id as item_id from record';
   searchRecordQs += ' left join user on created_by = user.user_id';
   searchRecordQs += ' left join group_info on application_group = group_info.group_id';
-  searchRecordQs += ' left join record_last_access on user.user_id = record_last_access.user_id and record.record_id = record_last_access.record_id';  searchRecordQs += ' where status = "closed" order by updated_at desc, record_id asc limit ? offset ?';
+  searchRecordQs += ' left join record_item_file on record.record_id = record_item_file.linked_record_id';
+  searchRecordQs += ' left join record_last_access on user.user_id = record_last_access.user_id and record.record_id = record_last_access.record_id';
+  searchRecordQs += ' where status = "closed" order by updated_at desc, record_id asc limit ? offset ?';
 
   const [recordResult] = await pool.query(searchRecordQs, [limit, offset]);
   mylog(recordResult);
@@ -547,10 +545,7 @@ const allClosed = async (req, res) => {
 
     applicationGroupName = recordResult[i].group_name;
 
-    const [itemResult] = await pool.query(searchThumbQs, [recordId]);
-    if (itemResult.length === 1) {
-      thumbNailItemId = itemResult[0].item_id;
-    }
+    thumbNailItemId = recordResult[i].item_id;
 
     const [countResult] = await pool.query(countQs, [recordId]);
     if (countResult.length === 1) {
@@ -607,9 +602,11 @@ const mineActive = async (req, res) => {
     limit = 10;
   }
 
-  let searchRecordQs = 'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.updated_at, user.user_id as user_id, group_info.name as group_name,user.name as user_name, record_last_access.access_time as access_time from record';
+  let searchRecordQs =
+  'select record.record_id, record.status, record.title, record.detail, record.category_id, record.application_group, record.created_by, record.created_at, record.updated_at, user.user_id as user_id, group_info.name as group_name,user.name as user_name, record_last_access.access_time as access_time, record_item_file.item_id as item_id from record';
   searchRecordQs += ' left join user on created_by = user.user_id';
   searchRecordQs += ' left join group_info on application_group = group_info.group_id';
+  searchRecordQs += ' left join record_item_file on record.record_id = record_item_file.linked_record_id';
   searchRecordQs += ' left join record_last_access on user.user_id = record_last_access.user_id and record.record_id = record_last_access.record_id';
   searchRecordQs += ' where created_by = ? and status = "open" order by updated_at desc, record_id asc limit ? offset ?';
   const [recordResult] = await pool.query(searchRecordQs, [user.user_id, limit, offset]);
