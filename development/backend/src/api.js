@@ -259,7 +259,6 @@ const tomeActive = async (req, res) => {
   let searchRecordQs ='select record.record_id, user.name as user_name, user.user_id as user_id, group_info.name as group_name, record_last_access.access_time as access_time from record';
   searchRecordQs += ' left join user on created_by = user.user_id';
   searchRecordQs += ' left join group_info on application_group = group_info.group_id';
-  searchRecordQs += ' left join record_item_file on record.record_id = record_item_file.linked_record_id';
   searchRecordQs += ' left join record_last_access on user.user_id = record_last_access.user_id and record.record_id = record_last_access.record_id';
   searchRecordQs += ' where status = "open" and (category_id, application_group) in (';
   let recordCountQs =
@@ -290,6 +289,8 @@ const tomeActive = async (req, res) => {
   const items = Array(recordResult.length);
   let count = 0;
 
+  const searchThumbQs =
+    'select * from record_item_file where linked_record_id = ? order by item_id asc limit 1';
   const countQs = 'select count(*) from record_comment where linked_record_id = ?';
 
   for (let i = 0; i < recordResult.length; i++) {
@@ -323,7 +324,10 @@ const tomeActive = async (req, res) => {
     
     applicationGroupName = recordResult[i].group_name;
 
-    thumbNailItemId = recordResult[i].item_id;
+    const [itemResult] = await pool.query(searchThumbQs, [recordId]);
+    if (itemResult.length === 1) {
+      thumbNailItemId = itemResult[0].item_id;
+    }
 
     const [countResult] = await pool.query(countQs, [recordId]);
     if (countResult.length === 1) {
