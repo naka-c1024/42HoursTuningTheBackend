@@ -12,3 +12,6 @@ ALTER TABLE record_last_access ADD INDEX index_record_last_access_on_user_id_rec
 
 -- 262 tomeAccess
 ALTER TABLE record ADD INDEX index_record_on_category_id_application_group(category_id, application_group);
+
+-- 240 tomeAccess
+ALTER TABLE record_item_file ADD INDEX index_record_item_file_on_linked_record_id_item_id(linked_record_id, item_id);
