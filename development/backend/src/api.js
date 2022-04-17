@@ -463,9 +463,9 @@ const allActive = async (req, res) => {
     items[i] = resObj;
   }
 
-  const recordCountQs = 'select count(*) from record where status = "open"';
+  const recordCountQs = 'select count(*) from record where created_by = ? and status = "open"';
 
-  const [recordCountResult] = await pool.query(recordCountQs);
+  const [recordCountResult] = await pool.query(recordCountQs, [user.user_id]);
   if (recordCountResult.length === 1) {
     count = recordCountResult[0]['count(*)'];
   }
